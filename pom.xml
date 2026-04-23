@@ -14,7 +14,7 @@
 	<name>test-Disruptor</name>
 	<description>Demo project for Spring Boot with Disruptor high-performance queue</description>
 	<properties>
-		<java.version>21</java.version>
+		<java.version>25</java.version>
 		<lombok.version>1.18.40</lombok.version>
 	</properties>
 	<dependencies>
