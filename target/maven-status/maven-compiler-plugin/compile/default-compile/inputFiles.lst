@@ -1,8 +1,0 @@
-/Users/junw/Documents/GitHub/test-Disruptor/src/main/java/wo1261931780/testDisruptor/TestDisruptorApplication.java
-/Users/junw/Documents/GitHub/test-Disruptor/src/main/java/wo1261931780/testDisruptor/config/BeanManager.java
-/Users/junw/Documents/GitHub/test-Disruptor/src/main/java/wo1261931780/testDisruptor/config/HelloEventHandler.java
-/Users/junw/Documents/GitHub/test-Disruptor/src/main/java/wo1261931780/testDisruptor/config/MQManager.java
-/Users/junw/Documents/GitHub/test-Disruptor/src/main/java/wo1261931780/testDisruptor/factory/HelloEventFactory.java
-/Users/junw/Documents/GitHub/test-Disruptor/src/main/java/wo1261931780/testDisruptor/model/MessageModel.java
-/Users/junw/Documents/GitHub/test-Disruptor/src/main/java/wo1261931780/testDisruptor/service/DisruptorMqService.java
-/Users/junw/Documents/GitHub/test-Disruptor/src/main/java/wo1261931780/testDisruptor/service/Impl/DisruptorMqServiceImpl.java
