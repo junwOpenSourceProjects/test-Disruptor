@@ -42,6 +42,54 @@ src/main/java/wo1261931780/testDisruptor/
     └── HelloEventFactory.java     # 事件工厂
 ```
 
+## 系统架构图
+
+```mermaid
+flowchart TB
+    subgraph Producer["生产者 Producer"]
+        P1["生产者 1"]
+        P2["生产者 2"]
+        Pn["生产者 N"]
+    end
+
+    subgraph Core["Disruptor 核心"]
+        RingBuffer["RingBuffer<br/>环形缓冲区"]
+        Sequence["Sequence 序列<br/>消费者进度追踪"]
+        WaitStrategy["WaitStrategy<br/>等待策略"]
+    end
+
+    subgraph Consumer["消费者 Consumer"]
+        C1["消费者 1"]
+        C2["消费者 2"]
+        Cn["消费者 N"]
+    end
+
+    subgraph Handler["EventHandler"]
+        Handler1["HelloEventHandler<br/>事件处理器 1"]
+        Handler2["HelloEventHandler<br/>事件处理器 2"]
+    end
+
+    P1 --> RingBuffer
+    P2 --> RingBuffer
+    Pn --> RingBuffer
+
+    RingBuffer --> C1
+    RingBuffer --> C2
+    RingBuffer --> Cn
+
+    C1 --> Handler1
+    C2 --> Handler1
+    Cn --> Handler2
+
+    RingBuffer -.->|"CAS 无锁"| Sequence
+    Sequence -.->|"协调"| WaitStrategy
+
+    style Producer fill:#e3f2fd,stroke:#1565c0
+    style Core fill:#fff3e0,stroke:#f57c00
+    style Consumer fill:#e8f5e9,stroke:#388e3c
+    style Handler fill:#fce4ec,stroke:#c2185b
+```
+
 ## 快速开始
 
 ```bash
