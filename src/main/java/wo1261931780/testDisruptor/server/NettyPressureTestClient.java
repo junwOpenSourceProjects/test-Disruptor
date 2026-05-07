@@ -32,7 +32,7 @@ public class NettyPressureTestClient {
     private static final String SERVER_HOST = "127.0.0.1";
     private static final int SERVER_PORT = 8888;
     private static final int THREAD_COUNT = 10;
-    private static final int TEST_DURATION_SECONDS = 3;
+    private static final int TEST_DURATION_SECONDS = 300; // 5 分钟
 
     private static final AtomicInteger totalRequests = new AtomicInteger(0);
     private static final AtomicInteger totalResponses = new AtomicInteger(0);
