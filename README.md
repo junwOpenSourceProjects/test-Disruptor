@@ -13,6 +13,7 @@ Disruptor 是英国外汇交易公司 LMAX 开发的一个高性能队列，研�
 - Java 17
 - Spring Boot 3.1.5
 - Disruptor 3.4.4
+- Netty 4.1.86.Final（服务器层）
 - Lombok
 
 ## 核心概念
@@ -125,6 +126,42 @@ mvn spring-boot:run
 | 延迟 | 微秒级 | 纳秒级 |
 | 锁机制 | 加锁 | 无锁（CAS） |
 | 内存分配 | 频繁GC | 环形缓冲区（复用） |
+
+## 压力测试结果（Netty + Disruptor）
+
+测试日期：2026-05-07
+测试时长：3 秒
+并发线程数：10
+消息体：字符串消息（约 50 字节）
+Disruptor 配置：RingBuffer 262144，`BlockingWaitStrategy`，2 个消费者线程
+
+| 指标 | 结果 |
+|------|------|
+| 总发送请求数 | 23,414 |
+| 实际测试时长 | 3,002 ms |
+| QPS（发送） | **7,800 req/s** |
+| 响应率 | 100%（23,414/23,414） |
+
+> 注：消费者 `HelloEventHandler` 含 1 秒 `Thread.sleep` 模拟业务处理，实际吞吐量会受业务逻辑影响。
+
+## Netty 服务器架构
+
+Netty 作为网络层（Reactor 模式），接收请求后通过 Disruptor 实现高性能队列解耦：
+
+```mermaid
+flowchart LR
+    Client["Netty 客户端<br/>NIO EventLoop"] --> |TCP 连接| Boss["BossGroup<br/>Accept"]
+    Boss --> Worker["WorkerGroup<br/>Handler"]
+    Worker --> Disruptor["Disruptor<br/>RingBuffer"]
+    Disruptor --> Consumer["消费者线程池<br/>Executor"]
+    Consumer --> Handler["HelloEventHandler<br/>业务处理"]
+```
+
+核心组件：
+- `NettyServer`：Reactor 模式，BossGroup + WorkerGroup，端口 8888
+- `NettyServerHandler`：ChannelInboundHandlerAdapter，接收到消息后投放到 Disruptor
+- `NettyServerStarter`：Spring Boot 启动后初始化 Netty 服务器
+- `NettyPressureTestClient`：10 线程并发压测工具
 
 ## 应用场景
 
